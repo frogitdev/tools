@@ -1,0 +1,1 @@
+ReactDOM.render(React.createElement(App, null), document.querySelector('#root'));

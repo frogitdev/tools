@@ -229,7 +229,7 @@ var App = function (_Comp3) {
                                 null,
                                 'FrogIT Tools'
                             ),
-                            ' BETA 0.1.1 ',
+                            ' BETA 0.1.2 ',
                             React.createElement(
                                 'a',
                                 { href: 'https://github.com/frogitdev/tools', target: '_blank' },

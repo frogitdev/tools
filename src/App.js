@@ -132,7 +132,7 @@ class App extends Comp {
                 <Nums id="1" val={lVal} valChange={this.handleValChange2} unit={this.state.unit2} unitChange={this.handleUnitChange2} />
                 <div id="credit">
                     <div className="balloon">
-                    <span><b>FrogIT Tools</b> BETA 0.1.1 <a href="https://github.com/frogitdev/tools" target="_blank">(C) FrogIT</a></span>
+                    <span><b>FrogIT Tools</b> BETA 0.1.2 <a href="https://github.com/frogitdev/tools" target="_blank">(C) FrogIT</a></span>
                     </div>
                 </div>
             </main>

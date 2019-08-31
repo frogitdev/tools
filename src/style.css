@@ -19,7 +19,7 @@ body {
 header {
     position: fixed;
     width: 100vw;
-    height: 100px;
+    height: 50px;
     background-color: lightblue;
     cursor: default;
 }
@@ -27,6 +27,7 @@ header {
 .nums {
     width: 100vw;
     height: 50vh;
+    min-height: 300px;
 }
 #nums0 {
     background-color: lightblue;
@@ -51,6 +52,7 @@ header {
 .valinput {
     display: none;
     background-color: rgba(255, 255, 255, .01);
+    -webkit-appearance: none;
 }
 
 #valgroup0:hover #vallabel0, #valgroup1:hover #vallabel1 {
@@ -66,6 +68,8 @@ header {
     outline: none;
     font-size: 1em;
     background-color: rgba(255, 255, 255, .01);
+    text-align-last: center;
+    -webkit-appearance: none;
 }
 
 .intinval {
@@ -78,14 +82,17 @@ header {
 }
 
 #credit {
-    position: absolute;
-    right: 0;
+    position: fixed;
+    width: 100vw;
     bottom: 0;
-    margin: 20px;
-    padding: 10px;
-    height: 64px;
+    height: 42px;
 
     text-align: right;
     font-size: 14px;
     color: darkslategray;
+}
+
+@media screen and (max-width: 900px) {
+    .vallabel { display: none; }
+    .valinput { display: block; }
 }

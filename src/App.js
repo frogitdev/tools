@@ -41,12 +41,12 @@ class Nums extends Comp {
         return (
             <div id={'nums'+this.props.id} className="nums">
                 <div className="balloon">
-                    <div id={'valgroup'+this.props.id} className="valgroup" onClick={void(0)}>
+                    <div id={'valgroup'+this.props.id} className="valgroup">
                         <p id={'vallabel'+this.props.id} className="vallabel">
                             <span className="intinval">{floatsep[0]}</span>
                             <span className="floatinval">.{floatsep[1]}</span>
                         </p>
-                        <input type="text" id={'valinput'+this.props.id} className="valinput" value={this.props.val} onChange={this.handleValChange}></input>
+                        <input type="text" id={'valinput'+this.props.id} className="valinput" pattern="[0-9.]*" step="any" value={this.props.val} onChange={this.handleValChange}></input>
                     </div>
                     <select name={selectname} value={this.props.unit} onChange={this.handleUnitChange}>
                         {units}
@@ -131,9 +131,9 @@ class App extends Comp {
                 <Nums id="0" val={uVal} valChange={this.handleValChange1} unit={this.state.unit1} unitChange={this.handleUnitChange1} />
                 <Nums id="1" val={lVal} valChange={this.handleValChange2} unit={this.state.unit2} unitChange={this.handleUnitChange2} />
                 <div id="credit">
-                    <a href="https://github.com/frogitdev/tools" target="_blank">GitHub Repository</a><br />
-                    <b>FrogIT Tools</b> BETA 0.1.0<br />
-                    (C) <a href="http://frogit.xyz" target="_blank">FrogIT</a>. Licensed under the GPL-3.0<br />
+                    <div className="balloon">
+                    <span><b>FrogIT Tools</b> BETA 0.1.1 <a href="https://github.com/frogitdev/tools" target="_blank">(C) FrogIT</a></span>
+                    </div>
                 </div>
             </main>
         )

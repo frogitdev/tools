@@ -64,7 +64,7 @@ var Nums = function (_Comp) {
                     { className: 'balloon' },
                     React.createElement(
                         'div',
-                        { id: 'valgroup' + this.props.id, className: 'valgroup', onClick: void 0 },
+                        { id: 'valgroup' + this.props.id, className: 'valgroup' },
                         React.createElement(
                             'p',
                             { id: 'vallabel' + this.props.id, className: 'vallabel' },
@@ -80,7 +80,7 @@ var Nums = function (_Comp) {
                                 floatsep[1]
                             )
                         ),
-                        React.createElement('input', { type: 'text', id: 'valinput' + this.props.id, className: 'valinput', value: this.props.val, onChange: this.handleValChange })
+                        React.createElement('input', { type: 'text', id: 'valinput' + this.props.id, className: 'valinput', pattern: '[0-9.]*', step: 'any', value: this.props.val, onChange: this.handleValChange })
                     ),
                     React.createElement(
                         'select',
@@ -219,26 +219,24 @@ var App = function (_Comp3) {
                     'div',
                     { id: 'credit' },
                     React.createElement(
-                        'a',
-                        { href: 'https://github.com/frogitdev/tools', target: '_blank' },
-                        'GitHub Repository'
-                    ),
-                    React.createElement('br', null),
-                    React.createElement(
-                        'b',
-                        null,
-                        'FrogIT Tools'
-                    ),
-                    ' BETA 0.1.0',
-                    React.createElement('br', null),
-                    '(C) ',
-                    React.createElement(
-                        'a',
-                        { href: 'http://frogit.xyz', target: '_blank' },
-                        'FrogIT'
-                    ),
-                    '. Licensed under the GPL-3.0',
-                    React.createElement('br', null)
+                        'div',
+                        { className: 'balloon' },
+                        React.createElement(
+                            'span',
+                            null,
+                            React.createElement(
+                                'b',
+                                null,
+                                'FrogIT Tools'
+                            ),
+                            ' BETA 0.1.1 ',
+                            React.createElement(
+                                'a',
+                                { href: 'https://github.com/frogitdev/tools', target: '_blank' },
+                                '(C) FrogIT'
+                            )
+                        )
+                    )
                 )
             );
         }

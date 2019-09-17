@@ -7,7 +7,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Comp = React.Component;
-var category = 9;
+var category = 7;
 
 function tryConvert(val, curunit, cvunit) {
     val *= factor[category][curunit];
@@ -46,7 +46,11 @@ var Nums = function (_Comp) {
         key: 'render',
         value: function render() {
             var selectname = "unit" + this.props.id;
-            var floatsep = this.props.val.toString().split('.');
+            var floatround = Math.round(this.props.val * 100000) / 100000;
+            var floatsep = floatround.toString().split('.');
+            var floatraw = this.props.val.toString();
+            var floatrawsep = floatraw.split('.');
+            var more = floatraw.search('e') == -1 & (floatrawsep[1] === undefined || floatrawsep[1].length < 5) ? '' : '...';
             var unitnames = unit[category];
             var units = unitnames.map(function (value, index) {
                 return React.createElement(
@@ -77,7 +81,8 @@ var Nums = function (_Comp) {
                                 'span',
                                 { className: 'floatinval' },
                                 '.',
-                                floatsep[1]
+                                floatsep[1],
+                                more
                             )
                         ),
                         React.createElement('input', { type: 'text', id: 'valinput' + this.props.id, className: 'valinput', pattern: '[0-9.]*', step: 'any', value: this.props.val, onChange: this.handleValChange })
@@ -103,8 +108,8 @@ var Menu = function (_Comp2) {
 
         var _this2 = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
 
-        _this2.handleCategoryChange = function (num) {
-            _this2.props.changeCategory(num);
+        _this2.handleShowChange = function (k) {
+            _this2.props.toggleShow(k);
         };
 
         _this2.state = {};
@@ -125,34 +130,14 @@ var Menu = function (_Comp2) {
                     React.createElement(
                         'p',
                         null,
+                        React.createElement('i', { className: 'fas fa-caret-square-down fa-lg', onClick: function onClick() {
+                                return _this3.handleShowChange('navi');
+                            } }),
                         React.createElement(
                             'span',
-                            null,
+                            { style: { marginLeft: '15px' } },
                             property[category],
-                            ' - Tools Beta'
-                        ),
-                        React.createElement(
-                            'span',
-                            { style: { color: 'blue', marginLeft: '10px' } },
-                            React.createElement(
-                                'span',
-                                { onClick: function onClick() {
-                                        return _this3.handleCategoryChange(9);
-                                    } },
-                                '\uC9C8\uB7C9'
-                            ),
-                            React.createElement(
-                                'span',
-                                null,
-                                ' '
-                            ),
-                            React.createElement(
-                                'span',
-                                { onClick: function onClick() {
-                                        return _this3.handleCategoryChange(15);
-                                    } },
-                                '\uC2DC\uAC04'
-                            )
+                            ' - \uB2E8\uC704\uBCC0\uD658'
                         )
                     )
                 )
@@ -163,43 +148,174 @@ var Menu = function (_Comp2) {
     return Menu;
 }(Comp);
 
-var App = function (_Comp3) {
-    _inherits(App, _Comp3);
+var Navi = function (_Comp3) {
+    _inherits(Navi, _Comp3);
+
+    function Navi(props) {
+        _classCallCheck(this, Navi);
+
+        var _this4 = _possibleConstructorReturn(this, (Navi.__proto__ || Object.getPrototypeOf(Navi)).call(this, props));
+
+        _this4.handleShowChange = function (k) {
+            _this4.props.toggleShow(k);
+        };
+
+        _this4.changeCategory = function (num) {
+            _this4.props.changeCategory(num);
+            _this4.handleShowChange('navi');
+        };
+
+        _this4.state = {};
+        return _this4;
+    }
+
+    _createClass(Navi, [{
+        key: 'render',
+        value: function render() {
+            var _this5 = this;
+
+            return React.createElement(
+                'div',
+                { id: 'navi', className: this.props.show },
+                React.createElement(
+                    'div',
+                    { className: 'balloon' },
+                    React.createElement(
+                        'div',
+                        { id: 'navitop' },
+                        React.createElement(
+                            'p',
+                            { onClick: function onClick() {
+                                    return _this5.handleShowChange('navi');
+                                } },
+                            '\uB2EB\uAE30'
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { id: 'navimain' },
+                        React.createElement(
+                            'div',
+                            { className: 'cont-round' },
+                            React.createElement(
+                                'h2',
+                                null,
+                                '\uB2E8\uC704\uBCC0\uD658'
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'navimain-links' },
+                                React.createElement(
+                                    'div',
+                                    { className: 'navimain-link', onClick: function onClick() {
+                                            return _this5.changeCategory(7);
+                                        } },
+                                    '\uAE38\uC774'
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'navimain-link', onClick: function onClick() {
+                                            return _this5.changeCategory(1);
+                                        } },
+                                    '\uB113\uC774'
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'navimain-link', onClick: function onClick() {
+                                            return _this5.changeCategory(9);
+                                        } },
+                                    '\uC9C8\uB7C9'
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'navimain-link', onClick: function onClick() {
+                                            return _this5.changeCategory(15);
+                                        } },
+                                    '\uC2DC\uAC04'
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'cont-round', id: 'credit' },
+                            React.createElement(
+                                'b',
+                                null,
+                                'FrogIT Tools'
+                            ),
+                            ' BETA 0.1.3',
+                            React.createElement('br', null),
+                            '(C) ',
+                            React.createElement(
+                                'a',
+                                { href: 'http://frogit.xyz', target: '_blank' },
+                                'FrogIT'
+                            ),
+                            '. Licensed under the GPL-3.0',
+                            React.createElement('br', null),
+                            React.createElement(
+                                'a',
+                                { href: 'https://github.com/frogitdev/tools', target: '_blank' },
+                                'GitHub Repository'
+                            ),
+                            React.createElement('br', null)
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Navi;
+}(Comp);
+
+var App = function (_Comp4) {
+    _inherits(App, _Comp4);
 
     function App(props) {
         _classCallCheck(this, App);
 
-        var _this4 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this4.handleValChange1 = function (val) {
-            _this4.setState({ val1: val, currentunit: _this4.state.unit1 });
+        _this6.handleValChange1 = function (val) {
+            _this6.setState({ val1: val, currentunit: _this6.state.unit1 });
         };
 
-        _this4.handleValChange2 = function (val) {
-            _this4.setState({ val2: val, currentunit: _this4.state.unit2 });
+        _this6.handleValChange2 = function (val) {
+            _this6.setState({ val2: val, currentunit: _this6.state.unit2 });
         };
 
-        _this4.handleUnitChange1 = function (unit) {
-            _this4.setState({ unit1: unit, currentunit: unit });
+        _this6.handleUnitChange1 = function (unit) {
+            _this6.setState({ unit1: unit, currentunit: unit });
         };
 
-        _this4.handleUnitChange2 = function (unit) {
-            _this4.setState({ unit2: unit, currentunit: unit });
+        _this6.handleUnitChange2 = function (unit) {
+            _this6.setState({ unit2: unit, currentunit: unit });
         };
 
-        _this4.handleCategoryChange = function (num) {
+        _this6.handleCategoryChange = function (num) {
             category = num;
-            _this4.setState({ val1: 0, unit1: 0, val2: 0, unit2: 1, currentunit: 0 });
+            _this6.setState({ val1: 0, unit1: 0, val2: 0, unit2: 1, currentunit: 0 });
         };
 
-        _this4.state = {
+        _this6.handleShowChange = function (k) {
+            switch (k) {
+                case 'navi':
+                    var set = _this6.state.shownavi == 'f' ? 'shownavi' : 'f';
+                    _this6.setState({ shownavi: set });
+            }
+        };
+
+        _this6.state = {
             val1: 0,
             unit1: 0,
             val2: 0,
             unit2: 1,
-            currentunit: 0
+            currentunit: 0,
+
+            shownavi: 'f'
         };
-        return _this4;
+        return _this6;
     }
 
     _createClass(App, [{
@@ -207,37 +323,31 @@ var App = function (_Comp3) {
         value: function render() {
             var curunit = this.state.currentunit;
             var uVal = curunit == this.state.unit1 ? this.state.val1 : tryConvert(this.state.val2, curunit, this.state.unit1);
-            var lVal = curunit == this.state.unit2 ? this.state.val2 : tryConvert(this.state.val1, curunit, this.state.unit2);
+            var lVal = (curunit == this.state.unit2 ? this.state.val2 : tryConvert(this.state.val1, curunit, this.state.unit2)).toFixed(10);
+
+            uVal = Math.round(uVal * 1E+11) / 1E+11;
+            lVal = Math.round(lVal * 1E+11) / 1E+11;
 
             return React.createElement(
-                'main',
-                null,
-                React.createElement(Menu, { changeCategory: this.handleCategoryChange }),
-                React.createElement(Nums, { id: '0', val: uVal, valChange: this.handleValChange1, unit: this.state.unit1, unitChange: this.handleUnitChange1 }),
-                React.createElement(Nums, { id: '1', val: lVal, valChange: this.handleValChange2, unit: this.state.unit2, unitChange: this.handleUnitChange2 }),
+                'div',
+                { id: 'root' },
                 React.createElement(
-                    'div',
-                    { id: 'credit' },
+                    'main',
+                    { className: this.state.shownavi },
+                    React.createElement(Menu, { toggleShow: this.handleShowChange }),
+                    React.createElement(Nums, { id: '0', val: uVal, valChange: this.handleValChange1, unit: this.state.unit1, unitChange: this.handleUnitChange1 }),
+                    React.createElement(Nums, { id: '1', val: lVal, valChange: this.handleValChange2, unit: this.state.unit2, unitChange: this.handleUnitChange2 }),
                     React.createElement(
                         'div',
-                        { className: 'balloon' },
+                        { id: 'middle' },
                         React.createElement(
-                            'span',
-                            null,
-                            React.createElement(
-                                'b',
-                                null,
-                                'FrogIT Tools'
-                            ),
-                            ' BETA 0.1.2 ',
-                            React.createElement(
-                                'a',
-                                { href: 'https://github.com/frogitdev/tools', target: '_blank' },
-                                '(C) FrogIT'
-                            )
+                            'div',
+                            { id: 'equal-decoration' },
+                            React.createElement('i', { className: 'fas fa-equals' })
                         )
                     )
-                )
+                ),
+                React.createElement(Navi, { show: this.state.shownavi, toggleShow: this.handleShowChange, changeCategory: this.handleCategoryChange })
             );
         }
     }]);

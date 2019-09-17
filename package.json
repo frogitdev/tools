@@ -1,6 +1,6 @@
 {
   "name": "tools",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Web calculator tool service",
   "main": "index.js",
   "scripts": {

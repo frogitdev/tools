@@ -1,1 +1,1 @@
-ReactDOM.render(React.createElement(App, null), document.querySelector('#root'));
+ReactDOM.render(React.createElement(App, null), document.querySelector('#page'));

@@ -122,7 +122,7 @@ class Navi extends Comp {
                             </div>
                         </div>
                         <div className="cont-round" id="credit">
-                            <b>FrogIT Tools</b> BETA 0.2.0<br />
+                            <b>FrogIT Tools</b> BETA 0.2.1<br />
                             (C) <a href="http://frogit.xyz" target="_blank">FrogIT</a>. Licensed under the GPL-3.0<br />
                             <a href="https://github.com/frogitdev/tools" target="_blank">GitHub Repository</a><br />
                         </div>

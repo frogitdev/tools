@@ -243,7 +243,7 @@ var Navi = function (_Comp3) {
                                 null,
                                 'FrogIT Tools'
                             ),
-                            ' BETA 0.1.3',
+                            ' BETA 0.2.1',
                             React.createElement('br', null),
                             '(C) ',
                             React.createElement(

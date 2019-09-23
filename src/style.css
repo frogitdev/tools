@@ -22,10 +22,6 @@
     margin-top: 0;
 }
 
-header, #nums0 {
-    background: #a1f0da;
-}
-
 main {
     filter: none;
     transition: 1s ease;
@@ -36,6 +32,7 @@ main.shownavi {
 
 body {
     margin: 0;
+    background: #fafafa;
 }
 
 #navi {
@@ -86,17 +83,15 @@ body {
 header {
     position: fixed;
     width: 100vw;
-    height: 70px;
+    height: 60px;
     cursor: default;
+    background: #fafafa;
 }
 
 .nums {
     width: 100vw;
     height: 50vh;
     min-height: 300px;
-}
-#nums1 {
-    background-color: white;
 }
 
 .nums .balloon {
@@ -127,6 +122,12 @@ header {
 }
 #valgroup0:hover #valinput0, #valgroup1:hover #valinput1 {
     display: block;
+}
+
+.valmilsep {
+    margin: 0;
+    font-size: 16px;
+    color: gray;
 }
 
 .nums select {
@@ -166,6 +167,17 @@ header {
     color: white;
     font-size: 20px;
     font-weight: bold;
+}
+
+#indicator {
+    position: fixed;
+    z-index: -1;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 0vh;
+    background: linear-gradient(#fafafa, #DFEBE3);
+    transition: height .5s ease;
 }
 
 @media screen and (max-width: 900px) {

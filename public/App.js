@@ -15,6 +15,26 @@ function tryConvert(val, curunit, cvunit) {
     return val;
 }
 
+function numberToKorean(number) {
+    var inputNumber = number < 10000 ? false : number;
+    var unitWords = ["", "만", "억", "조", "경"];
+    var resultArray = [];
+    var resultString = "";
+
+    for (var i = 0; i < unitWords.length; i++) {
+        var unitResult = Math.floor(inputNumber % Math.pow(10000, i + 1) / Math.pow(10000, i));
+        if (unitResult > 0) {
+            resultArray[i] = unitResult;
+        }
+    }
+    for (var i = 0; i < resultArray.length; i++) {
+        if (resultArray[i]) {
+            resultString = "" + resultArray[i] + unitWords[i] + " " + resultString;
+        }
+    }
+    return inputNumber >= 1E+20 ? resultString + ' 초과' : resultString;
+}
+
 var Nums = function (_Comp) {
     _inherits(Nums, _Comp);
 
@@ -43,7 +63,7 @@ var Nums = function (_Comp) {
     }
 
     _createClass(Nums, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             var selectname = "unit" + this.props.id;
             var floatround = Math.round(this.props.val * 100000) / 100000;
@@ -51,44 +71,50 @@ var Nums = function (_Comp) {
             var floatraw = this.props.val.toString();
             var floatrawsep = floatraw.split('.');
             var more = floatraw.search('e') == -1 & (floatrawsep[1] === undefined || floatrawsep[1].length < 5) ? '' : '...';
+            var hangeul = numberToKorean(floatsep[0]);
             var unitnames = unit[category];
             var units = unitnames.map(function (value, index) {
                 return React.createElement(
-                    'option',
+                    "option",
                     { key: index, value: index },
                     value
                 );
             });
 
             return React.createElement(
-                'div',
-                { id: 'nums' + this.props.id, className: 'nums' },
+                "div",
+                { id: 'nums' + this.props.id, className: "nums" },
                 React.createElement(
-                    'div',
-                    { className: 'balloon' },
+                    "div",
+                    { className: "balloon" },
                     React.createElement(
-                        'div',
-                        { id: 'valgroup' + this.props.id, className: 'valgroup' },
+                        "div",
+                        { id: 'valgroup' + this.props.id, className: "valgroup" },
                         React.createElement(
-                            'p',
-                            { id: 'vallabel' + this.props.id, className: 'vallabel' },
+                            "p",
+                            { id: 'vallabel' + this.props.id, className: "vallabel" },
                             React.createElement(
-                                'span',
-                                { className: 'intinval' },
+                                "span",
+                                { className: "intinval" },
                                 floatsep[0]
                             ),
                             React.createElement(
-                                'span',
-                                { className: 'floatinval' },
-                                '.',
+                                "span",
+                                { className: "floatinval" },
+                                ".",
                                 floatsep[1],
                                 more
                             )
                         ),
-                        React.createElement('input', { type: 'text', id: 'valinput' + this.props.id, className: 'valinput', pattern: '[0-9.]*', step: 'any', value: this.props.val, onChange: this.handleValChange })
+                        React.createElement("input", { type: "text", id: 'valinput' + this.props.id, className: "valinput", pattern: "[0-9.]*", step: "any", value: this.props.val, onChange: this.handleValChange })
                     ),
                     React.createElement(
-                        'select',
+                        "p",
+                        { className: "valmilsep" },
+                        hangeul
+                    ),
+                    React.createElement(
+                        "select",
                         { name: selectname, value: this.props.unit, onChange: this.handleUnitChange },
                         units
                     )
@@ -117,27 +143,27 @@ var Menu = function (_Comp2) {
     }
 
     _createClass(Menu, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             var _this3 = this;
 
             return React.createElement(
-                'header',
+                "header",
                 null,
                 React.createElement(
-                    'div',
-                    { className: 'balloon' },
+                    "div",
+                    { className: "balloon" },
                     React.createElement(
-                        'p',
+                        "p",
                         null,
-                        React.createElement('i', { className: 'fas fa-caret-square-down fa-lg', onClick: function onClick() {
+                        React.createElement("i", { className: "fas fa-caret-square-down fa-lg", onClick: function onClick() {
                                 return _this3.handleShowChange('navi');
                             } }),
                         React.createElement(
-                            'span',
+                            "span",
                             { style: { marginLeft: '15px' } },
                             property[category],
-                            ' - \uB2E8\uC704\uBCC0\uD658'
+                            " - \uB2E8\uC704\uBCC0\uD658"
                         )
                     )
                 )
@@ -170,95 +196,109 @@ var Navi = function (_Comp3) {
     }
 
     _createClass(Navi, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             var _this5 = this;
 
             return React.createElement(
-                'div',
-                { id: 'navi', className: this.props.show },
+                "div",
+                { id: "navi", className: this.props.show },
                 React.createElement(
-                    'div',
-                    { className: 'balloon' },
+                    "div",
+                    { className: "balloon" },
                     React.createElement(
-                        'div',
-                        { id: 'navitop' },
+                        "div",
+                        { id: "navitop" },
                         React.createElement(
-                            'p',
+                            "p",
                             { onClick: function onClick() {
                                     return _this5.handleShowChange('navi');
                                 } },
-                            '\uB2EB\uAE30'
+                            "\uB2EB\uAE30"
                         )
                     ),
                     React.createElement(
-                        'div',
-                        { id: 'navimain' },
+                        "div",
+                        { id: "navimain" },
                         React.createElement(
-                            'div',
-                            { className: 'cont-round' },
+                            "div",
+                            { className: "cont-round" },
                             React.createElement(
-                                'h2',
+                                "h2",
                                 null,
-                                '\uB2E8\uC704\uBCC0\uD658'
+                                "\uB2E8\uC704\uBCC0\uD658"
                             ),
                             React.createElement(
-                                'div',
-                                { className: 'navimain-links' },
+                                "div",
+                                { className: "navimain-links" },
                                 React.createElement(
-                                    'div',
-                                    { className: 'navimain-link', onClick: function onClick() {
+                                    "div",
+                                    { className: "navimain-link", onClick: function onClick() {
                                             return _this5.changeCategory(7);
                                         } },
-                                    '\uAE38\uC774'
+                                    "\uAE38\uC774"
                                 ),
                                 React.createElement(
-                                    'div',
-                                    { className: 'navimain-link', onClick: function onClick() {
+                                    "div",
+                                    { className: "navimain-link", onClick: function onClick() {
                                             return _this5.changeCategory(1);
                                         } },
-                                    '\uB113\uC774'
+                                    "\uB113\uC774"
                                 ),
                                 React.createElement(
-                                    'div',
-                                    { className: 'navimain-link', onClick: function onClick() {
+                                    "div",
+                                    { className: "navimain-link", onClick: function onClick() {
+                                            return _this5.changeCategory(18);
+                                        } },
+                                    "\uBD80\uD53C"
+                                ),
+                                React.createElement(
+                                    "div",
+                                    { className: "navimain-link", onClick: function onClick() {
                                             return _this5.changeCategory(9);
                                         } },
-                                    '\uC9C8\uB7C9'
+                                    "\uC9C8\uB7C9"
                                 ),
                                 React.createElement(
-                                    'div',
-                                    { className: 'navimain-link', onClick: function onClick() {
+                                    "div",
+                                    { className: "navimain-link", onClick: function onClick() {
+                                            return _this5.changeCategory(16);
+                                        } },
+                                    "\uC18D\uB3C4"
+                                ),
+                                React.createElement(
+                                    "div",
+                                    { className: "navimain-link", onClick: function onClick() {
                                             return _this5.changeCategory(15);
                                         } },
-                                    '\uC2DC\uAC04'
+                                    "\uC2DC\uAC04"
                                 )
                             )
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'cont-round', id: 'credit' },
+                            "div",
+                            { className: "cont-round", id: "credit" },
                             React.createElement(
-                                'b',
+                                "b",
                                 null,
-                                'FrogIT Tools'
+                                "FrogIT Tools"
                             ),
-                            ' BETA 0.2.1',
-                            React.createElement('br', null),
-                            '(C) ',
+                            " BETA 0.3.0",
+                            React.createElement("br", null),
+                            "(C) ",
                             React.createElement(
-                                'a',
-                                { href: 'http://frogit.xyz', target: '_blank' },
-                                'FrogIT'
+                                "a",
+                                { href: "http://frogit.xyz", target: "_blank" },
+                                "FrogIT"
                             ),
-                            '. Licensed under the GPL-3.0',
-                            React.createElement('br', null),
+                            ". Licensed under the GPL-3.0",
+                            React.createElement("br", null),
                             React.createElement(
-                                'a',
-                                { href: 'https://github.com/frogitdev/tools', target: '_blank' },
-                                'GitHub Repository'
+                                "a",
+                                { href: "https://github.com/frogitdev/tools", target: "_blank" },
+                                "GitHub Repository"
                             ),
-                            React.createElement('br', null)
+                            React.createElement("br", null)
                         )
                     )
                 )
@@ -278,24 +318,24 @@ var App = function (_Comp4) {
         var _this6 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
         _this6.handleValChange1 = function (val) {
-            _this6.setState({ val1: val, currentunit: _this6.state.unit1 });
+            _this6.setState({ upper: { val: val, unit: _this6.state.upper.unit }, focused: 'upper' });
         };
 
         _this6.handleValChange2 = function (val) {
-            _this6.setState({ val2: val, currentunit: _this6.state.unit2 });
+            _this6.setState({ lower: { val: val, unit: _this6.state.lower.unit }, focused: 'lower' });
         };
 
         _this6.handleUnitChange1 = function (unit) {
-            _this6.setState({ unit1: unit, currentunit: unit });
+            _this6.setState({ upper: { unit: unit, val: _this6.state[_this6.state.focused].val } });
         };
 
         _this6.handleUnitChange2 = function (unit) {
-            _this6.setState({ unit2: unit, currentunit: unit });
+            _this6.setState({ lower: { unit: unit, val: _this6.state[_this6.state.focused].val } });
         };
 
         _this6.handleCategoryChange = function (num) {
             category = num;
-            _this6.setState({ val1: 0, unit1: 0, val2: 0, unit2: 1, currentunit: 0 });
+            _this6.setState({ upper: { val: 0, unit: 0 }, lower: { val: 0, unit: 1 }, focused: 'upper' });
         };
 
         _this6.handleShowChange = function (k) {
@@ -307,11 +347,15 @@ var App = function (_Comp4) {
         };
 
         _this6.state = {
-            val1: 0,
-            unit1: 0,
-            val2: 0,
-            unit2: 1,
-            currentunit: 0,
+            upper: {
+                val: 0,
+                unit: 0
+            },
+            lower: {
+                val: 0,
+                unit: 1
+            },
+            focused: 'upper',
 
             shownavi: 'f'
         };
@@ -319,33 +363,34 @@ var App = function (_Comp4) {
     }
 
     _createClass(App, [{
-        key: 'render',
+        key: "render",
         value: function render() {
-            var curunit = this.state.currentunit;
-            var uVal = curunit == this.state.unit1 ? this.state.val1 : tryConvert(this.state.val2, curunit, this.state.unit1);
-            var lVal = (curunit == this.state.unit2 ? this.state.val2 : tryConvert(this.state.val1, curunit, this.state.unit2)).toFixed(10);
-
+            var focused = this.state.focused;
+            var uVal = focused == 'upper' ? this.state.upper.val : tryConvert(this.state.lower.val, this.state.lower.unit, this.state.upper.unit);
+            var lVal = focused == 'lower' ? this.state.lower.val : tryConvert(this.state.upper.val, this.state.upper.unit, this.state.lower.unit);
             uVal = Math.round(uVal * 1E+11) / 1E+11;
             lVal = Math.round(lVal * 1E+11) / 1E+11;
+            var percentage = Math.min(tryConvert(this.state[focused].val, this.state[focused].unit, 0) / permax[category] * 100, 300);
 
             return React.createElement(
-                'div',
-                { id: 'root' },
+                "div",
+                { id: "root" },
                 React.createElement(
-                    'main',
+                    "main",
                     { className: this.state.shownavi },
                     React.createElement(Menu, { toggleShow: this.handleShowChange }),
-                    React.createElement(Nums, { id: '0', val: uVal, valChange: this.handleValChange1, unit: this.state.unit1, unitChange: this.handleUnitChange1 }),
-                    React.createElement(Nums, { id: '1', val: lVal, valChange: this.handleValChange2, unit: this.state.unit2, unitChange: this.handleUnitChange2 }),
+                    React.createElement(Nums, { id: "0", val: uVal, valChange: this.handleValChange1, unit: this.state.upper.unit, unitChange: this.handleUnitChange1 }),
+                    React.createElement(Nums, { id: "1", val: lVal, valChange: this.handleValChange2, unit: this.state.lower.unit, unitChange: this.handleUnitChange2 }),
                     React.createElement(
-                        'div',
-                        { id: 'middle' },
+                        "div",
+                        { id: "middle" },
                         React.createElement(
-                            'div',
-                            { id: 'equal-decoration' },
-                            React.createElement('i', { className: 'fas fa-equals' })
+                            "div",
+                            { id: "equal-decoration" },
+                            React.createElement("i", { className: "fas fa-equals" })
                         )
-                    )
+                    ),
+                    React.createElement("div", { id: "indicator", style: { height: percentage + "vh" } })
                 ),
                 React.createElement(Navi, { show: this.state.shownavi, toggleShow: this.handleShowChange, changeCategory: this.handleCategoryChange })
             );

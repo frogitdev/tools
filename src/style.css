@@ -60,9 +60,14 @@ body {
     grid-template-columns: auto auto auto auto;
 }
 .navimain-link {
-    padding: 10px;
+    padding: 16px;
     font-size: 18px;
     cursor: pointer;
+    text-align: center;
+    border-radius: 20px;
+}
+.navimain-link:hover {
+    background: #eee;
 }
 
 #navitop {

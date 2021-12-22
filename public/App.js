@@ -7,13 +7,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Comp = React.Component;
-var category = 7;
-
-function tryConvert(val, curunit, cvunit) {
-    val *= factor[category][curunit];
-    val /= factor[category][cvunit];
-    return val;
-}
 
 function numberToKorean(number) {
     var inputNumber = number < 10000 ? false : number;
@@ -35,13 +28,13 @@ function numberToKorean(number) {
     return inputNumber >= 1E+20 ? resultString + ' 초과' : resultString;
 }
 
-var Nums = function (_Comp) {
-    _inherits(Nums, _Comp);
+var Unit_Nums = function (_Comp) {
+    _inherits(Unit_Nums, _Comp);
 
-    function Nums(props) {
-        _classCallCheck(this, Nums);
+    function Unit_Nums(props) {
+        _classCallCheck(this, Unit_Nums);
 
-        var _this = _possibleConstructorReturn(this, (Nums.__proto__ || Object.getPrototypeOf(Nums)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Unit_Nums.__proto__ || Object.getPrototypeOf(Unit_Nums)).call(this, props));
 
         _this.handleValChange = function (e) {
             var input = e.target.value;
@@ -62,7 +55,7 @@ var Nums = function (_Comp) {
         return _this;
     }
 
-    _createClass(Nums, [{
+    _createClass(Unit_Nums, [{
         key: "render",
         value: function render() {
             var selectname = "unit" + this.props.id;
@@ -72,7 +65,7 @@ var Nums = function (_Comp) {
             var floatrawsep = floatraw.split('.');
             var more = floatraw.search('e') == -1 & (floatrawsep[1] === undefined || floatrawsep[1].length < 5) ? '' : '...';
             var hangeul = numberToKorean(floatsep[0]);
-            var unitnames = unit[category];
+            var unitnames = unit[this.props.category];
             var units = unitnames.map(function (value, index) {
                 return React.createElement(
                     "option",
@@ -123,7 +116,7 @@ var Nums = function (_Comp) {
         }
     }]);
 
-    return Nums;
+    return Unit_Nums;
 }(Comp);
 
 var Menu = function (_Comp2) {
@@ -155,14 +148,14 @@ var Menu = function (_Comp2) {
                     { className: "balloon" },
                     React.createElement(
                         "p",
-                        null,
-                        React.createElement("i", { className: "fas fa-caret-square-down fa-lg", onClick: function onClick() {
+                        { onClick: function onClick() {
                                 return _this3.handleShowChange('navi');
-                            } }),
+                            } },
+                        React.createElement("i", { className: "fas fa-caret-square-down fa-lg" }),
                         React.createElement(
                             "span",
                             { style: { marginLeft: '15px' } },
-                            property[category],
+                            property[this.props.category],
                             " - \uB2E8\uC704\uBCC0\uD658"
                         )
                     )
@@ -283,7 +276,7 @@ var Navi = function (_Comp3) {
                                 null,
                                 "FrogIT Tools"
                             ),
-                            " BETA 0.3.0",
+                            " BETA 0.3.1",
                             React.createElement("br", null),
                             "(C) ",
                             React.createElement(
@@ -309,13 +302,13 @@ var Navi = function (_Comp3) {
     return Navi;
 }(Comp);
 
-var App = function (_Comp4) {
-    _inherits(App, _Comp4);
+var Unit = function (_Comp4) {
+    _inherits(Unit, _Comp4);
 
-    function App(props) {
-        _classCallCheck(this, App);
+    function Unit(props) {
+        _classCallCheck(this, Unit);
 
-        var _this6 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (Unit.__proto__ || Object.getPrototypeOf(Unit)).call(this, props));
 
         _this6.handleValChange1 = function (val) {
             _this6.setState({ upper: { val: val, unit: _this6.state.upper.unit }, focused: 'upper' });
@@ -333,20 +326,14 @@ var App = function (_Comp4) {
             _this6.setState({ lower: { unit: unit, val: _this6.state[_this6.state.focused].val } });
         };
 
-        _this6.handleCategoryChange = function (num) {
-            category = num;
-            _this6.setState({ upper: { val: 0, unit: 0 }, lower: { val: 0, unit: 1 }, focused: 'upper' });
-        };
-
-        _this6.handleShowChange = function (k) {
-            switch (k) {
-                case 'navi':
-                    var set = _this6.state.shownavi == 'f' ? 'shownavi' : 'f';
-                    _this6.setState({ shownavi: set });
-            }
+        _this6.tryConvert = function (val, curunit, cvunit) {
+            val *= factor[_this6.state.category][curunit];
+            val /= factor[_this6.state.category][cvunit];
+            return val;
         };
 
         _this6.state = {
+            category: 0,
             upper: {
                 val: 0,
                 unit: 0
@@ -355,44 +342,90 @@ var App = function (_Comp4) {
                 val: 0,
                 unit: 1
             },
-            focused: 'upper',
-
-            shownavi: 'f'
+            focused: 'upper'
         };
         return _this6;
+    }
+
+    _createClass(Unit, [{
+        key: "render",
+        value: function render() {
+            var focused = this.state.focused;
+            var uVal = focused == 'upper' ? this.state.upper.val : this.tryConvert(this.state.lower.val, this.state.lower.unit, this.state.upper.unit);
+            var lVal = focused == 'lower' ? this.state.lower.val : this.tryConvert(this.state.upper.val, this.state.upper.unit, this.state.lower.unit);
+            uVal = Math.round(uVal * 1E+11) / 1E+11;
+            lVal = Math.round(lVal * 1E+11) / 1E+11;
+            var percentage = Math.min(this.tryConvert(this.state[focused].val, this.state[focused].unit, 0) / permax[this.props.category] * 100, 300);
+
+            return React.createElement(
+                "main",
+                { className: this.props.shownavi },
+                React.createElement(Menu, { toggleShow: this.props.toggleShow, category: this.state.category }),
+                React.createElement(Unit_Nums, { id: "0", category: this.state.category, val: uVal, valChange: this.handleValChange1, unit: this.state.upper.unit, unitChange: this.handleUnitChange1 }),
+                React.createElement(Unit_Nums, { id: "1", category: this.state.category, val: lVal, valChange: this.handleValChange2, unit: this.state.lower.unit, unitChange: this.handleUnitChange2 }),
+                React.createElement(
+                    "div",
+                    { id: "middle" },
+                    React.createElement(
+                        "div",
+                        { id: "equal-decoration" },
+                        React.createElement("i", { className: "fas fa-equals" })
+                    )
+                ),
+                React.createElement("div", { id: "indicator", style: { height: percentage + "vh" } })
+            );
+        }
+    }], [{
+        key: "getDerivedStateFromProps",
+        value: function getDerivedStateFromProps(props, state) {
+            if (props.category !== state.category) {
+                return {
+                    upper: { val: 0, unit: 0 }, lower: { val: 0, unit: 1 }, focused: 'upper',
+                    category: props.category
+                };
+            }
+            return null;
+        }
+    }]);
+
+    return Unit;
+}(Comp);
+
+var App = function (_Comp5) {
+    _inherits(App, _Comp5);
+
+    function App(props) {
+        _classCallCheck(this, App);
+
+        var _this7 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+        _this7.handleCategoryChange = function (num) {
+            _this7.setState({ category: num });
+        };
+
+        _this7.handleShowChange = function (k) {
+            switch (k) {
+                case 'navi':
+                    var set = _this7.state.shownavi == 'f' ? 'shownavi' : 'f';
+                    _this7.setState({ shownavi: set });
+            }
+        };
+
+        _this7.state = {
+            shownavi: 'f',
+            category: 7
+        };
+        return _this7;
     }
 
     _createClass(App, [{
         key: "render",
         value: function render() {
-            var focused = this.state.focused;
-            var uVal = focused == 'upper' ? this.state.upper.val : tryConvert(this.state.lower.val, this.state.lower.unit, this.state.upper.unit);
-            var lVal = focused == 'lower' ? this.state.lower.val : tryConvert(this.state.upper.val, this.state.upper.unit, this.state.lower.unit);
-            uVal = Math.round(uVal * 1E+11) / 1E+11;
-            lVal = Math.round(lVal * 1E+11) / 1E+11;
-            var percentage = Math.min(tryConvert(this.state[focused].val, this.state[focused].unit, 0) / permax[category] * 100, 300);
-
             return React.createElement(
                 "div",
                 { id: "root" },
-                React.createElement(
-                    "main",
-                    { className: this.state.shownavi },
-                    React.createElement(Menu, { toggleShow: this.handleShowChange }),
-                    React.createElement(Nums, { id: "0", val: uVal, valChange: this.handleValChange1, unit: this.state.upper.unit, unitChange: this.handleUnitChange1 }),
-                    React.createElement(Nums, { id: "1", val: lVal, valChange: this.handleValChange2, unit: this.state.lower.unit, unitChange: this.handleUnitChange2 }),
-                    React.createElement(
-                        "div",
-                        { id: "middle" },
-                        React.createElement(
-                            "div",
-                            { id: "equal-decoration" },
-                            React.createElement("i", { className: "fas fa-equals" })
-                        )
-                    ),
-                    React.createElement("div", { id: "indicator", style: { height: percentage + "vh" } })
-                ),
-                React.createElement(Navi, { show: this.state.shownavi, toggleShow: this.handleShowChange, changeCategory: this.handleCategoryChange })
+                React.createElement(Unit, { shownavi: this.state.shownavi, category: this.state.category, toggleShow: this.handleShowChange }),
+                React.createElement(Navi, { show: this.state.shownavi, category: this.state.category, toggleShow: this.handleShowChange, changeCategory: this.handleCategoryChange })
             );
         }
     }]);

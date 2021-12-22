@@ -1,11 +1,4 @@
 const Comp = React.Component
-var category = 7
-
-function tryConvert(val, curunit, cvunit) {
-    val *= factor[category][curunit]
-    val /= factor[category][cvunit]
-    return val
-}
 
 function numberToKorean(number) {
     var inputNumber = number < 10000 ? false : number
@@ -27,7 +20,7 @@ function numberToKorean(number) {
     return (inputNumber >= 1E+20) ? resultString+' 초과' : resultString
 }
 
-class Nums extends Comp {
+class Unit_Nums extends Comp {
     constructor(props) {
         super(props)
         this.state = {
@@ -58,7 +51,7 @@ class Nums extends Comp {
         const floatrawsep = floatraw.split('.')
         const more = (floatraw.search('e')==-1 & (floatrawsep[1]===undefined || floatrawsep[1].length<5)) ? '' : '...'
         const hangeul = numberToKorean(floatsep[0])
-        const unitnames = unit[category]
+        const unitnames = unit[this.props.category]
         const units = unitnames.map((value, index) => {
             return <option key={index} value={index}>{value}</option>
         })
@@ -99,9 +92,9 @@ class Menu extends Comp {
         return (
             <header>
                 <div className="balloon">
-                    <p>
-                        <i className="fas fa-caret-square-down fa-lg" onClick={() => this.handleShowChange('navi')}></i>
-                        <span style={{marginLeft: '15px'}}>{property[category]} - 단위변환</span>
+                    <p onClick={() => this.handleShowChange('navi')}>
+                        <i className="fas fa-caret-square-down fa-lg"></i>
+                        <span style={{marginLeft: '15px'}}>{property[this.props.category]} - 단위변환</span>
                     </p>
                 </div>
             </header>
@@ -146,7 +139,7 @@ class Navi extends Comp {
                             </div>
                         </div>
                         <div className="cont-round" id="credit">
-                            <b>FrogIT Tools</b> BETA 0.3.0<br />
+                            <b>FrogIT Tools</b> BETA 0.3.1<br />
                             (C) <a href="http://frogit.xyz" target="_blank">FrogIT</a>. Licensed under the GPL-3.0<br />
                             <a href="https://github.com/frogitdev/tools" target="_blank">GitHub Repository</a><br />
                         </div>
@@ -157,10 +150,11 @@ class Navi extends Comp {
     }
 }
 
-class App extends Comp {
+class Unit extends Comp {
     constructor(props) {
         super(props)
         this.state = {
+            category: 0,
             upper: {
                 val: 0,
                 unit: 0
@@ -169,10 +163,18 @@ class App extends Comp {
                 val: 0,
                 unit: 1
             },
-            focused : 'upper',
-
-            shownavi: 'f'
+            focused : 'upper'
         }
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.category !== state.category) {
+            return {
+                upper: {val: 0, unit: 0}, lower: {val: 0, unit: 1}, focused : 'upper',
+                category: props.category
+            }
+        }
+        return null
     }
 
     handleValChange1 = (val) => {
@@ -191,9 +193,50 @@ class App extends Comp {
         this.setState({lower: {unit: unit, val: this.state[this.state.focused].val}})
     }
 
+    tryConvert = (val, curunit, cvunit) => {
+        val *= factor[this.state.category][curunit]
+        val /= factor[this.state.category][cvunit]
+        return val
+    }
+
+    render() {
+        var focused = this.state.focused
+        var uVal = (focused=='upper') ? this.state.upper.val : this.tryConvert(this.state.lower.val, this.state.lower.unit, this.state.upper.unit)
+        var lVal = (focused=='lower') ? this.state.lower.val : this.tryConvert(this.state.upper.val, this.state.upper.unit, this.state.lower.unit)
+        uVal = Math.round(uVal*1E+11)/1E+11
+        lVal = Math.round(lVal*1E+11)/1E+11
+        var percentage = Math.min(this.tryConvert(this.state[focused].val, this.state[focused].unit, 0) / permax[this.props.category] * 100, 300)
+        
+        return (
+            <main className={this.props.shownavi}>
+                <Menu toggleShow={this.props.toggleShow} category={this.state.category} />
+
+                <Unit_Nums id="0" category={this.state.category} val={uVal} valChange={this.handleValChange1} unit={this.state.upper.unit} unitChange={this.handleUnitChange1} />
+
+                <Unit_Nums id="1" category={this.state.category} val={lVal} valChange={this.handleValChange2} unit={this.state.lower.unit} unitChange={this.handleUnitChange2} />
+
+                <div id="middle">
+                    <div id="equal-decoration"><i className="fas fa-equals"></i></div>
+                </div>
+
+                <div id="indicator" style={{height: `${percentage}vh`}}>
+                </div>
+            </main>
+        )
+    }
+}
+
+class App extends Comp {
+    constructor(props) {
+        super(props)
+        this.state = {
+            shownavi: 'f',
+            category: 7
+        }
+    }
+
     handleCategoryChange = (num) => {
-        category = num
-        this.setState({upper: {val: 0, unit: 0}, lower: {val: 0, unit: 1}, focused : 'upper'})
+        this.setState({category: num})
     }
 
     handleShowChange = (k) => {
@@ -205,30 +248,10 @@ class App extends Comp {
     }
 
     render() {
-        var focused = this.state.focused
-        var uVal = (focused=='upper') ? this.state.upper.val : tryConvert(this.state.lower.val, this.state.lower.unit, this.state.upper.unit)
-        var lVal = (focused=='lower') ? this.state.lower.val : tryConvert(this.state.upper.val, this.state.upper.unit, this.state.lower.unit)
-        uVal = Math.round(uVal*1E+11)/1E+11
-        lVal = Math.round(lVal*1E+11)/1E+11
-        var percentage = Math.min(tryConvert(this.state[focused].val, this.state[focused].unit, 0) / permax[category] * 100, 300)
-        
         return (
             <div id="root">
-                <main className={this.state.shownavi}>
-                    <Menu toggleShow={this.handleShowChange} />
-
-                    <Nums id="0" val={uVal} valChange={this.handleValChange1} unit={this.state.upper.unit} unitChange={this.handleUnitChange1} />
-
-                    <Nums id="1" val={lVal} valChange={this.handleValChange2} unit={this.state.lower.unit} unitChange={this.handleUnitChange2} />
-
-                    <div id="middle">
-                        <div id="equal-decoration"><i className="fas fa-equals"></i></div>
-                    </div>
-
-                    <div id="indicator" style={{height: `${percentage}vh`}}>
-                    </div>
-                </main>
-                <Navi show={this.state.shownavi} toggleShow={this.handleShowChange} changeCategory={this.handleCategoryChange} />
+                <Unit shownavi={this.state.shownavi} category={this.state.category} toggleShow={this.handleShowChange} />
+                <Navi show={this.state.shownavi} category={this.state.category} toggleShow={this.handleShowChange} changeCategory={this.handleCategoryChange} />
             </div>
         )
     }
